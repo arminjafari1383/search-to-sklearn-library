@@ -7,7 +7,7 @@ from imblearn.over_sampling import SMOTE
 import seaborn as sns
 
 
-#Load and Explore the Dataset
+####Load and Explore the Dataset
 data = pd.read_csv("./data/creditcard.csv")
 data = data.dropna(subset=["Class"])
 
@@ -16,9 +16,26 @@ y = data["Class"]
 
 x = x.fillna(x.median)
 
-plt.bar(y.value_counts().index, y.value_counts().values,color=['skyblue','salmon'])
+# plt.bar(y.value_counts().index, y.value_counts().values,color=['skyblue','salmon'])
+# plt.xticks([0,1],['Non-Fraud','Fraud'])
+# plt.ylabel("Count")
+# plt.title("Original Class Distribution")
+# plt.show()
+
+
+#### Apply SMOTE to Balance Classes
+X_train,X_test,y_train,y_test = train_test_split(
+    x,
+    y,
+    test_size=0.2,
+    random_state=42,
+    stratify=y
+)
+smote = SMOTE(random_state=42)
+X_train_sm, y_train_sm = smote.fit_resample(X_train, y_train)
+plt.bar(y_train_sm.value_counts().index,y_train_sm.value_counts().values,color=['skyblue','salmon'])
 plt.xticks([0,1],['Non-Fraud','Fraud'])
 plt.ylabel("Count")
-plt.title("Original Class Distribution")
+plt.title("Class Distribution AFTER SMOTE")
 plt.show()
 
