@@ -8,6 +8,7 @@ import seaborn as sns
 from imblearn.over_sampling  import ADASYN
 from imblearn.over_sampling import BorderlineSMOTE
 from imblearn.combine import SMOTEENN
+from imblearn.combine import SMOTETomek
 
 
 
@@ -79,6 +80,15 @@ X_train_blsmote,y_train_blsmote = blsmote.fit_resample(X_train, y_train)
 smote_enn = SMOTEENN(random_state=42)
 X_train_smoteenn, y_train_smoteenn = smote_enn.fit_resample(X_train,y_train)
 
-print("Class distribution AFTER SMOTEENN:")
-print(y_train_smoteenn.value_counts())
+# print("Class distribution AFTER SMOTEENN:")
+# print(y_train_smoteenn.value_counts())
+
+
+#### SMOTE-TOMEK (Hybrid Method)
+smote_tomek = SMOTETomek(random_state=42)
+X_train_smotetomek,y_train_smotetomek = smote_tomek.fit_resample(X_train,y_train)
+print("Class distribution AFTER SMOTETomek:")
+print(y_train_smotetomek.value_counts())
+
+
 
