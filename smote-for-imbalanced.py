@@ -1,16 +1,17 @@
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score,classification_report,confusion_matrix
+from sklearn.datasets import make_classification
+from imblearn.over_sampling import SMOTENC
 from imblearn.over_sampling import SMOTE
-import seaborn as sns
 from imblearn.over_sampling  import ADASYN
 from imblearn.over_sampling import BorderlineSMOTE
 from imblearn.combine import SMOTEENN
 from imblearn.combine import SMOTETomek
-
-
+from collections import Counter
 
 ####Load and Explore the Dataset
 data = pd.read_csv("./data/creditcard.csv")
@@ -87,8 +88,31 @@ X_train_smoteenn, y_train_smoteenn = smote_enn.fit_resample(X_train,y_train)
 #### SMOTE-TOMEK (Hybrid Method)
 smote_tomek = SMOTETomek(random_state=42)
 X_train_smotetomek,y_train_smotetomek = smote_tomek.fit_resample(X_train,y_train)
-print("Class distribution AFTER SMOTETomek:")
-print(y_train_smotetomek.value_counts())
+# print("Class distribution AFTER SMOTETomek:")
+# print(y_train_smotetomek.value_counts())
 
+
+##SMOTE-NC (Nominal Continuous)
+
+X, y = make_classification(
+    n_classes=2,
+    class_sep=2,
+    weights=[0.1, 0.9],
+    n_informative=3,
+    n_redundant=1,
+    n_features=5,
+    n_clusters_per_class=1,
+    n_samples=100,
+    random_state=42
+)
+
+categorical_features = [0, 3]
+
+print("Before SMOTE-NC:", Counter(y))
+
+smote_nc = SMOTENC(categorical_features=categorical_features, random_state=42)
+X_res, y_res = smote_nc.fit_resample(X, y)
+
+print("After SMOTE-NC:", Counter(y_res))
 
 
