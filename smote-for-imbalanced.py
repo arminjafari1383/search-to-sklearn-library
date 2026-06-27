@@ -5,8 +5,8 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score,classification_report,confusion_matrix
 from imblearn.over_sampling import SMOTE
 import seaborn as sns
-import imblearn.over_sampling import ADASYN
-
+from imblearn.over_sampling  import ADASYN
+from imblearn.over_sampling import BorderlineSMOTE
 
 
 ####Load and Explore the Dataset
@@ -47,8 +47,8 @@ X_train_sm, y_train_sm = smote.fit_resample(X_train, y_train)
 model = LogisticRegression(random_state=42,max_iter=1000)
 model.fit(X_train_sm, y_train_sm)
 y_pred_sm = model.predict(X_test)
-print("Accuracy AFTER SMOTE:",round(accuracy_score(y_test,y_pred_sm)*100,2),"%\n")
-print("Classification Report AFTER SMOTE:\n",classification_report(y_test,y_pred_sm))
+# print("Accuracy AFTER SMOTE:",round(accuracy_score(y_test,y_pred_sm)*100,2),"%\n")
+# print("Classification Report AFTER SMOTE:\n",classification_report(y_test,y_pred_sm))
 
 # sns.heatmap(confusion_matrix(y_test,y_pred_sm),annot=True,fmt='d',cmap='Blues')
 # plt.title("Confusion Matrix AFTER SMOTE")
@@ -57,10 +57,18 @@ print("Classification Report AFTER SMOTE:\n",classification_report(y_test,y_pred
 # plt.show()
 
 
+#### ADASYN (ADSYN (adaptive synthetic sampling) stands for adaptive syntgetic sampling)
 adasyn = ADASYN(sampling_strategy = 'minority', random_state = 42)
-X_train_adasyn, y_train_adasyn = adasyn.fit_reasample(X_train,y_train)
-print("Class distribution AFTER ADASYN")
-print(y_train_adasyn.value_counts())
+X_train_adasyn, y_train_adasyn = adasyn.fit_resample(X_train,y_train)
+# print("Class distribution AFTER ADASYN")
+# print(y_train_adasyn.value_counts())
 
+
+#### Borderline SMOTE is modified version of SMOTE that focues only on minority samples that lie near the boundary between classes
+blsmote = BorderlineSMOTE(sampling_strategy='minority',kind = 'borderline-1',random_state=42)
+X_train_blsmote,y_train_blsmote = blsmote.fit_resample(X_train, y_train)
+
+print("Class distribution AFTER Borderline-SMOTE:")
+print(y_train_blsmote.value_counts())
 
 
