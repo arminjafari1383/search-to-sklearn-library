@@ -5,6 +5,8 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score,classification_report,confusion_matrix
 from imblearn.over_sampling import SMOTE
 import seaborn as sns
+import imblearn.over_sampling import ADASYN
+
 
 
 ####Load and Explore the Dataset
@@ -48,9 +50,17 @@ y_pred_sm = model.predict(X_test)
 print("Accuracy AFTER SMOTE:",round(accuracy_score(y_test,y_pred_sm)*100,2),"%\n")
 print("Classification Report AFTER SMOTE:\n",classification_report(y_test,y_pred_sm))
 
-sns.heatmap(confusion_matrix(y_test,y_pred_sm),annot=True,fmt='d',cmap='Blues')
-plt.title("Confusion Matrix AFTER SMOTE")
-plt.xlabel("Predicted")
-plt.ylabel("Actual")
-plt.show()
+# sns.heatmap(confusion_matrix(y_test,y_pred_sm),annot=True,fmt='d',cmap='Blues')
+# plt.title("Confusion Matrix AFTER SMOTE")
+# plt.xlabel("Predicted")
+# plt.ylabel("Actual")
+# plt.show()
+
+
+adasyn = ADASYN(sampling_strategy = 'minority', random_state = 42)
+X_train_adasyn, y_train_adasyn = adasyn.fit_reasample(X_train,y_train)
+print("Class distribution AFTER ADASYN")
+print(y_train_adasyn.value_counts())
+
+
 
