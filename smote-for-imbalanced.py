@@ -7,6 +7,8 @@ from imblearn.over_sampling import SMOTE
 import seaborn as sns
 from imblearn.over_sampling  import ADASYN
 from imblearn.over_sampling import BorderlineSMOTE
+from imblearn.combine import SMOTEENN
+
 
 
 ####Load and Explore the Dataset
@@ -68,7 +70,15 @@ X_train_adasyn, y_train_adasyn = adasyn.fit_resample(X_train,y_train)
 blsmote = BorderlineSMOTE(sampling_strategy='minority',kind = 'borderline-1',random_state=42)
 X_train_blsmote,y_train_blsmote = blsmote.fit_resample(X_train, y_train)
 
-print("Class distribution AFTER Borderline-SMOTE:")
-print(y_train_blsmote.value_counts())
+# print("Class distribution AFTER Borderline-SMOTE:")
+# print(y_train_blsmote.value_counts())
 
+
+#### SMOTE-ENN (Edited Nearest Neighbors)
+#### smote-enn combines two techniques i.e for oversampling and Edited Nearest Neighbors for cleaning
+smote_enn = SMOTEENN(random_state=42)
+X_train_smoteenn, y_train_smoteenn = smote_enn.fit_resample(X_train,y_train)
+
+print("Class distribution AFTER SMOTEENN:")
+print(y_train_smoteenn.value_counts())
 
